@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi.Runtime</AssemblyName>
+		<RootNamespace>Skyline.DataMiner.SDM.UserDefinedApi</RootNamespace>
+		<Version>0.3.0-B018</Version>
+		<PackageTags>Skyline;DataMiner</PackageTags>
+		<PackageProjectUrl>https://skyline.be</PackageProjectUrl>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageIcon>Icon.png</PackageIcon>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>SkylineCommunications</Authors>
+		<Company>Skyline Communications</Company>
+		<Description>Contains classes and generators that are commonly used when creating User-Defined Api's.</Description>
+		<RepositoryUrl>https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.UserDefinedApi</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!--<SonarQubeExclude>OData/OdataFilterParser.cs,OData/ODataToFilterElementConverter.cs,OData/ODataTokenizer.cs</SonarQubeExclude>-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="" />
+		<None Include="../LICENSE.txt" Pack="true" PackagePath="" />
+		<None Include="nuget\Icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Skyline.DataMiner.Dev.Automation" Version="10.4.1.2" />
+		<PackageReference Include="Skyline.DataMiner.SDM.Abstractions" Version="0.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Net.Http" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="SDM.UserDefinedApi.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="OData/*.cs">
+			<!-- Exclude the file from analysis -->
+			<SonarQubeExclude>true</SonarQubeExclude>
+		</Compile>
+	</ItemGroup>
+	
+	<!-- Can be used to set the location of your local nuget store to copy to -->
+	<Import Project="../Directory.Build.props.user" Condition="Exists('../Directory.Build.props.user')" />
+	<Target Name="CopyNuGetPackage" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(NuGetStorePath)\$(PackageId)" />
+	</Target>
+
+</Project>

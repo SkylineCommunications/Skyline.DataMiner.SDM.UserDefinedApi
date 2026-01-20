@@ -1,0 +1,33 @@
+﻿<Project Sdk="MSTest.Sdk/3.10.0">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<RootNamespace>Skyline.DataMiner.SDM.UserDefinedApi.Tests</RootNamespace>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseVSTest>true</UseVSTest>
+		<UserSecretsId>8ab48944-9dd8-4a8c-95fd-addc8be03102</UserSecretsId>
+		<SonarQubeExclude>true</SonarQubeExclude>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="7.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+
+		<!-- Needed at compile time, excluded at runtime -->
+		<PackageReference Include="Microsoft.Build" Version="17.9.5" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.Build.Framework" Version="17.9.5" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.9.5" ExcludeAssets="runtime" />
+
+		<!-- Locator is the only one that must run at runtime -->
+		<PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
+		<PackageReference Include="Microsoft.OpenApi" Version="2.3.1" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SDM.UserDefinedApi.Runtime\SDM.UserDefinedApi.Runtime.csproj" />
+		<ProjectReference Include="..\SDM.UserDefinedApi.Build\SDM.UserDefinedApi.Build.csproj" />
+	</ItemGroup>
+
+</Project>

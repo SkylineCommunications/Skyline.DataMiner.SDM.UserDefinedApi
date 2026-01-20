@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<PackageId>Skyline.DataMiner.SDM.UserDefinedApi</PackageId>
+		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi</AssemblyName>
+		<Version>0.3.0-B018</Version>
+		<PackageTags>Skyline;DataMiner</PackageTags>
+		<PackageProjectUrl>https://skyline.be</PackageProjectUrl>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageIcon>Icon.png</PackageIcon>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>SkylineCommunications</Authors>
+		<Company>Skyline Communications</Company>
+		<Description>Contains classes and generators that are commonly used when creating User-Defined Api's.</Description>
+		<RepositoryUrl>https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.UserDefinedApi</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="" />
+		<None Include="../LICENSE.txt" Pack="true" PackagePath="" />
+		<None Include="nuget/Icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="../SDM.UserDefinedApi.Runtime/SDM.UserDefinedApi.Runtime.csproj" />
+		<ProjectReference Include="../SDM.UserDefinedApi.Build/SDM.UserDefinedApi.Build.csproj" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- MSBuild props/targets -->
+		<None Include="../SDM.UserDefinedApi.Build/buildTransitive/Skyline.DataMiner.SDM.UserDefinedApi.Build.props"
+			  Pack="true"
+			  PackagePath="buildTransitive/Skyline.DataMiner.SDM.UserDefinedApi.props" />
+		<None Include="../SDM.UserDefinedApi.Build/buildTransitive/Skyline.DataMiner.SDM.UserDefinedApi.Build.targets"
+			  Pack="true"
+			  PackagePath="buildTransitive/Skyline.DataMiner.SDM.UserDefinedApi.targets" />
+	</ItemGroup>
+
+	<!-- Ensure Build project is built and include its files in package -->
+	<Target Name="IncludeBuildTaskFiles" BeforeTargets="GetTargetPath;GenerateNuspec">
+		<MSBuild Projects="../SDM.UserDefinedApi.Build/SDM.UserDefinedApi.Build.csproj" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		
+		<ItemGroup>
+			<!-- Build task DLL files -->
+			<None Include="../SDM.UserDefinedApi.Build/bin/$(Configuration)/netstandard2.0/*.dll"
+				  Pack="true"
+				  PackagePath="tasks/netstandard2.0/" />
+
+			<!-- Add the companion files for the installer -->
+			<None Include="../SDM.UserDefinedApi.Build/bin/$(Configuration)/netstandard2.0/Install/Content/*"
+				  Pack="true"
+				  PackagePath="tasks/netstandard2.0/Install/Content/" />
+		</ItemGroup>
+	</Target>
+	
+	<!-- Can be used to set the location of your local nuget store to copy to -->
+	<Import Project="../../../Directory.Build.props.user" Condition="Exists('../../../Directory.Build.props.user')" />
+	<Target Name="CopyNuGetPackage" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(NuGetStorePath)\$(PackageId)" />
+	</Target>
+
+
+</Project>

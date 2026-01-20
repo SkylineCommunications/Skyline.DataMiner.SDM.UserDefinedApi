@@ -1,0 +1,70 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- =================================================================== -->
+	<!--  OPENAPI GENERATION                                                 -->
+	<!-- =================================================================== -->
+	<Target Name="Generate OpenApi Specification"
+			Condition=" '$(GenerateOpenApi)' == 'true' "
+			Inputs="@(Compile)"
+			Outputs="$(OutputPath)openapi/openapi.$(OpenApiFormat)">
+
+		<Message Text="Running OpenApiTask from Skyline.DataMiner.SDM.UserDefinedApi"
+     Importance="High" />
+
+		<OpenApiTask
+			ProjectDirectory="$(MSBuildProjectDirectory)"
+			OutputPath="$(OutputPath)openapi"
+			ProjectName="$(MSBuildProjectName)"
+			ProjectVersion="$(Version)"
+			SourceFiles="@(Compile)"
+			References="@(ReferencePath)"
+			Format="$(OpenApiFormat)">
+		</OpenApiTask>
+	</Target>
+
+	<Target Name="Clean OpenApi Specifiation" AfterTargets="Clean">
+		<RemoveDir Directories="$(OutputPath)openapi" />
+	</Target>
+
+	<!-- =================================================================== -->
+	<!--  UDAPI PACKAGE GENERATION                                           -->
+	<!-- =================================================================== -->
+
+	<!-- This target depends on OpenAPI generation, but only runs when
+       GenerateUDAPIPackage == true.
+       If OpenAPI generation is disabled, MSBuild simply skips it. -->
+	<Target Name="Generate UDAPI Package"
+			DependsOnTargets="Generate OpenApi Specification"
+			Condition=" '$(GenerateUDAPIPackage)' == 'true' ">
+		
+		<Message Text="Running PackageTask from Skyline.DataMiner.SDM.UserDefinedApi"
+     Importance="High" />
+
+		<PackageTask
+			ProjectDirectory="$(MSBuildProjectDirectory)"
+			OutputPath="$(OutputPath)sdm"
+			ProjectName="$(MSBuildProjectName)"
+			ProjectVersion="$(Version)"
+			SourceFiles="@(Compile)"
+			References="@(ReferencePath)"
+			OpenApiFile="$(OutputPath)openapi/openapi.$(OpenApiFormat)">
+		</PackageTask>
+	</Target>
+
+	<Target Name="Clean UDAPI" AfterTargets="Clean">
+		<RemoveDir Directories="$(OutputPath)sdm" />
+	</Target>
+
+	<!-- =================================================================== -->
+	<!--  MAIN EXECUTION HOOK                                                -->
+	<!-- =================================================================== -->
+
+	<!-- This single hook ensures correct ordering:
+       * First tries OpenAPI (may be skipped)
+       * Then UDAPI (may be skipped)
+       * Runs after the project successfully compiles -->
+	<Target Name="Run UDAPI Process"
+			AfterTargets="CoreCompile"
+			DependsOnTargets="Generate OpenApi Specification;Generate UDAPI Package" />
+
+</Project>

@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi.Build</AssemblyName>
+		<RootNamespace>Skyline.DataMiner.SDM.UserDefinedApi</RootNamespace>
+		<Version>0.3.0-B018</Version>
+		<IsPackable>false</IsPackable>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+		<!-- This target will run when MSBuild is collecting the files to be packaged, and we'll implement it below. This property controls the dependency list for this packaging process, so by adding our custom property we hook ourselves into the process in a supported way. -->
+		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+		<!-- This property tells MSBuild where the root folder of the package's build assets should be. Because we are not a library package, we should not pack to 'lib'. Instead, we choose 'tasks' by convention. -->
+		<BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+		<!-- NuGet does validation that libraries in a package are exposed as dependencies, but we _explicitly_ do not want that behavior for MSBuild tasks. They are isolated by design. Therefore we ignore this specific warning. -->
+		<NoWarn>NU5100</NoWarn>
+		<!-- Suppress NuGet warning NU5128. -->
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<!-- Tell the SDK to generate a deps.json file -->
+		<GenerateDependencyFile>true</GenerateDependencyFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Install\Content\Install.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Install\Content\Install.csproj">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Install\Content\Install.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<ApplicationDefinition Include="Install\Content\Install.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</ApplicationDefinition>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="buildTransitive\Skyline.DataMiner.SDM.UserDefinedApi.Build.props" Pack="true" PackagePath="buildTransitive" />
+		<None Include="buildTransitive\Skyline.DataMiner.SDM.UserDefinedApi.Build.targets" Pack="true" PackagePath="buildTransitive" />
+		<None Include="Install\Content\Install.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="14.3.0" PrivateAssets="all" ExcludeAssets="Runtime" />
+		<PackageReference Include="Microsoft.OpenApi" Version="2.3.1" PrivateAssets="all" />
+		<PackageReference Include="Skyline.DataMiner.CICD.DMApp.Automation" Version="3.0.2" />
+		<PackageReference Include="Skyline.DataMiner.SDM.Parsers.Common" Version="0.3.1" />
+		<PackageReference Include="System.Security.AccessControl" Version="4.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="SDM.UserDefinedApi.Tests" />
+	</ItemGroup>
+
+	<!-- Copy Package Files to Unit Test project -->
+	<Target Name="Copy Install Content" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<Copy SourceFiles="$(OutputPath)Install\*" DestinationFolder="..\SDM.UserDefinedApi.Tests\$(OutputPath)Install\" />
+	</Target>
+
+	<!-- Copy the DLLs to a folder that already exists before packing -->
+	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+		<ItemGroup>
+			<!-- The TargetPath is the path inside the package that the source file will be placed. This is already precomputed in the ReferenceCopyLocalPaths items' DestinationSubPath, so reuse it here. -->
+			<BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- This target adds the generated deps.json file to our package output -->
+	<Target Name="AddBuildDependencyFileToBuiltProjectOutputGroupOutput" BeforeTargets="BuiltProjectOutputGroup" Condition=" '$(GenerateDependencyFile)' == 'true'">
+
+		<ItemGroup>
+			<BuiltProjectOutputGroupOutput Include="$(ProjectDepsFilePath)" TargetPath="$(ProjectDepsFileName)" FinalOutputPath="$(ProjectDepsFilePath)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- Can be used to set the location of your local nuget store to copy to -->
+	<Import Project="../Directory.Build.props.user" Condition="Exists('../Directory.Build.props.user')" />
+	<Target Name="CopyNuGetPackage" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(NuGetStorePath)\$(PackageId)" />
+	</Target>
+
+</Project>
