@@ -1,0 +1,25 @@
+name: CICD Internal Nuget
+permissions: write-all
+on:
+  push:
+    branches:
+    - '**'
+    tags:
+    - '[0-9]+.[0-9]+.[0-9]+'
+    - '[0-9]+.[0-9]+.[0-9]+-[0-9a-zA-Z]+'
+  workflow_dispatch: 
+jobs:
+  CICD:
+    name: CICD 
+    uses: SkylineCommunications/_ReusableWorkflows/.github/workflows/Internal NuGet Solution Master Workflow.yml@main
+    with:
+      #  projectPath: Skyline.DataMiner.SDM.Abstractions/SDM.Abstractions.csproj
+      referenceName: ${{ github.ref_name }}
+      runNumber: ${{ github.run_number }}
+      referenceType: ${{ github.ref_type }}
+      repository: ${{ github.repository }}
+      owner: ${{ github.repository_owner }}
+      sonarCloudProjectName: ${{ vars.SONAR_NAME }}
+    secrets:
+      sonarCloudToken: ${{ secrets.SONAR_TOKEN }}
+      nugetApiKey: ${{ secrets.NUGETAPIKEY_GITHUB  }}

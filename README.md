@@ -195,7 +195,7 @@ _api = UserDefinedApi.CreateBuilder()
     .AddRepository<IRepository, RepositoryImpl>()
     .ConfigureServices((services) =>
     {
-        
+        services.AddSingleton<MySingletonClass>();
     })
     .Build();
 ```
