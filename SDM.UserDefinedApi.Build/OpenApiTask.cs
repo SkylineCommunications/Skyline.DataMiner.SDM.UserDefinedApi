@@ -72,8 +72,6 @@
 			{
 				Log.LogMessage(MessageImportance.High, "Starting OpenAPI generation...");
 
-				File.WriteAllText(@"C:\Users\ArneMA\Downloads\references.txt", String.Join(Environment.NewLine, References.Select(x => x.ItemSpec)));
-
 				var doc = CreateDocument(ProjectName, ProjectVersion, SourceFiles.Select(f => f.ItemSpec), References.Select(f => f.ItemSpec), (message) => Log.LogMessage(MessageImportance.High, message));
 				var (fileName, content) = FormatDocument(doc, Format);
 
