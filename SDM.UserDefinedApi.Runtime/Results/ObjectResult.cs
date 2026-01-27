@@ -57,7 +57,7 @@
 				throw new NotSupportedException($"Could not convert result of type '{typeof(T).FullName}', because no valid converter was found.");
 			}
 
-			context.Response.ResponseBody = converter.ConvertOutput(typeof(T), typeof(object));
+			context.Response.ResponseBody = converter.ConvertOutput(Value!, typeof(T));
 		}
 	}
 }
