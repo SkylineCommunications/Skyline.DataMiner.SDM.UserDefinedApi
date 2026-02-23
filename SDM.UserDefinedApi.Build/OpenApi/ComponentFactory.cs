@@ -39,6 +39,11 @@
 				return predefinedSchema;
 			}
 
+			if (TryCreateTimeSpanScheme(symbol, out var timeSpanScheme))
+			{
+				return timeSpanScheme;
+			}
+
 			if (TryCreateEnumScheme(symbol, out var enumSchema))
 			{
 				return enumSchema;
@@ -86,6 +91,23 @@
 				.ToList();
 			schema.Enum = enumValues;
 			return true;
+		}
+
+		private static bool TryCreateTimeSpanScheme(INamedTypeSymbol symbol, out OpenApiSchema? schema)
+		{
+			if (SymbolEqualityComparer.Default.Equals(symbol, TypeHelper.Instance.TimeSpanSymbol))
+			{
+				schema = new OpenApiSchema
+				{
+					Type = JsonSchemaType.String,
+					Description = "TimeSpan formatted as hh:mm:ss.fffffff",
+					Example = JsonValue.Create("00:00:00.0000000"),
+				};
+				return true;
+			}
+
+			schema = null;
+			return false;
 		}
 
 		private static bool TryCreateGuidScheme(INamedTypeSymbol symbol, out OpenApiSchema? schema)

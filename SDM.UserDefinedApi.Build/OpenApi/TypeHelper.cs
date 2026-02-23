@@ -16,6 +16,7 @@
 		private readonly INamedTypeSymbol? _sdmObjectRefSymbol;
 		private readonly INamedTypeSymbol? _sdmDomStorageAttributeSymbol;
 		private readonly INamedTypeSymbol? _guidSymbol;
+		private readonly INamedTypeSymbol? _timespanSymbol;
 
 		private TypeHelper()
 		{
@@ -28,6 +29,7 @@
 			_sdmObjectRefSymbol = compilation.GetTypeByMetadataName("Skyline.DataMiner.SDM.SdmObjectReference`1");
 			_sdmDomStorageAttributeSymbol = compilation.GetTypeByMetadataName("Skyline.DataMiner.SDM.SdmDomStorageAttribute");
 			_guidSymbol = compilation.GetTypeByMetadataName("System.Guid");
+			_timespanSymbol = compilation.GetTypeByMetadataName("System.TimeSpan");
 		}
 
 		public static TypeHelper Instance => _instance;
@@ -41,6 +43,8 @@
 		public INamedTypeSymbol? SdmDomStorageAttributeSymbol { get => _sdmDomStorageAttributeSymbol; }
 
 		public INamedTypeSymbol? GuidSymbol { get => _guidSymbol; }
+
+		public INamedTypeSymbol? TimeSpanSymbol { get => _timespanSymbol; }
 
 		public static void Load(Compilation compilation)
 		{
