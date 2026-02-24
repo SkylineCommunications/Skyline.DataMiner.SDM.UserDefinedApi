@@ -1,4 +1,5 @@
 name: Public
+permissions: write-all
 on:
   push:
     tags:

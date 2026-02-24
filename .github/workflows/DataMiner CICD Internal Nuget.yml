@@ -12,7 +12,6 @@ jobs:
     name: CICD 
     uses: SkylineCommunications/_ReusableWorkflows/.github/workflows/Internal NuGet Solution Master Workflow.yml@main
     with:
-      #  projectPath: Skyline.DataMiner.SDM.Abstractions/SDM.Abstractions.csproj
       referenceName: ${{ github.ref_name }}
       runNumber: ${{ github.run_number }}
       referenceType: ${{ github.ref_type }}

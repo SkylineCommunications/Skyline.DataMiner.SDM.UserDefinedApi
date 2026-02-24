@@ -132,7 +132,7 @@
 				}
 
 				response.Description = String.Empty;
-				response.Content = new Dictionary<string, OpenApiMediaType>
+				response.Content = new Dictionary<string, IOpenApiMediaType>
 				{
 					["application/json"] = new OpenApiMediaType
 					{
@@ -200,7 +200,7 @@
 
 			var requestBody = new OpenApiRequestBody
 			{
-				Content = new Dictionary<string, OpenApiMediaType>
+				Content = new Dictionary<string, IOpenApiMediaType>
 				{
 					["application/json"] = new OpenApiMediaType
 					{

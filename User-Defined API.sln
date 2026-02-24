@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11505.172 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.UserDefinedApi.Runtime", "SDM.UserDefinedApi.Runtime\SDM.UserDefinedApi.Runtime.csproj", "{1EFFAAA4-3248-23C2-54A9-AA6CC15315B3}"
 EndProject
@@ -10,6 +10,36 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.UserDefinedApi", "SDM.UserDefinedApi\SDM.UserDefinedApi.csproj", "{26A9E197-9281-6965-220E-73A4421B7918}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDM.UserDefinedApi.Tests", "SDM.UserDefinedApi.Tests\SDM.UserDefinedApi.Tests.csproj", "{384C652F-4B87-719D-2C26-D56C4644F7A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7BB3B25-B41F-4FB6-97A1-072A778C08A1}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{345E51C1-0505-4263-B772-87BD83493F40}"
+	ProjectSection(SolutionItems) = preProject
+		.github\CODEOWNERS = .github\CODEOWNERS
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8AE7B655-EEA7-4A82-837E-53BF52219AD2}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\DataMiner CICD Internal Nuget.yml = .github\workflows\DataMiner CICD Internal Nuget.yml
+		.github\workflows\DataMiner CICD Nuget.yml = .github\workflows\DataMiner CICD Nuget.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{5F03A252-2C02-481B-A4E5-C9F7BDD3F1C0}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\bug_report.md = .github\ISSUE_TEMPLATE\bug_report.md
+		.github\ISSUE_TEMPLATE\documentation.md = .github\ISSUE_TEMPLATE\documentation.md
+		.github\ISSUE_TEMPLATE\feature_request.md = .github\ISSUE_TEMPLATE\feature_request.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +66,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{345E51C1-0505-4263-B772-87BD83493F40} = {F7BB3B25-B41F-4FB6-97A1-072A778C08A1}
+		{8AE7B655-EEA7-4A82-837E-53BF52219AD2} = {345E51C1-0505-4263-B772-87BD83493F40}
+		{5F03A252-2C02-481B-A4E5-C9F7BDD3F1C0} = {345E51C1-0505-4263-B772-87BD83493F40}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B5C0AF7-209B-48AC-982F-D667CFC72716}
 	EndGlobalSection
 EndGlobal

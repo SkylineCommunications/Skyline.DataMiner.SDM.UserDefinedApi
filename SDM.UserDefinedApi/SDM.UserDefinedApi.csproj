@@ -8,7 +8,7 @@
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<PackageId>Skyline.DataMiner.SDM.UserDefinedApi</PackageId>
 		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi</AssemblyName>
-		<Version>1.0.1-rc1</Version>
+		<Version>1.0.1-rc2</Version>
 		<PackageTags>Skyline;DataMiner</PackageTags>
 		<PackageProjectUrl>https://skyline.be</PackageProjectUrl>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -64,10 +64,8 @@
 	</Target>
 	
 	<!-- Can be used to set the location of your local nuget store to copy to -->
-	<Import Project="../../../Directory.Build.props.user" Condition="Exists('../../../Directory.Build.props.user')" />
+	<Import Project="../Directory.Build.props.user" Condition="Exists('../Directory.Build.props.user')" />
 	<Target Name="CopyNuGetPackage" AfterTargets="Pack" Condition="'$(NuGetStorePath)' != '' and '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(NuGetStorePath)\$(PackageId)" />
 	</Target>
-
-
 </Project>
