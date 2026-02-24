@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.CompilerServices;
 
 	using FluentAssertions;
 
@@ -43,6 +44,11 @@
 
 	public static class PersonExposers
 	{
+		static PersonExposers()
+		{
+			RuntimeHelpers.RunClassConstructor(typeof(ExternalIdentifiers).TypeHandle);
+		}
+
 		public static readonly Exposer<Person, string> Identifier = new Exposer<Person, string>((obj) => obj.Identifier, "Identifier");
 		public static readonly Exposer<Person, string> Name = new Exposer<Person, string>((obj) => obj.Name, "Name");
 		public static readonly Exposer<Person, int> Age = new Exposer<Person, int>((obj) => obj.Age, "Age");
