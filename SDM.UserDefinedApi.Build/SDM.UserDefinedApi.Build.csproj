@@ -7,7 +7,7 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi.Build</AssemblyName>
 		<RootNamespace>Skyline.DataMiner.SDM.UserDefinedApi</RootNamespace>
-		<Version>0.3.0-B018</Version>
+		<Version>1.0.1</Version>
 		<IsPackable>false</IsPackable>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -54,7 +54,7 @@
 		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="14.3.0" PrivateAssets="all" ExcludeAssets="Runtime" />
 		<PackageReference Include="Microsoft.OpenApi" Version="2.3.1" PrivateAssets="all" />
 		<PackageReference Include="Skyline.DataMiner.CICD.DMApp.Automation" Version="3.0.2" />
-		<PackageReference Include="Skyline.DataMiner.SDM.Parsers.Common" Version="0.3.1" />
+		<PackageReference Include="Skyline.DataMiner.SDM.Parsers.Common" Version="1.0.1-rc3" />
 		<PackageReference Include="System.Security.AccessControl" Version="4.5.0" />
 	</ItemGroup>
 
