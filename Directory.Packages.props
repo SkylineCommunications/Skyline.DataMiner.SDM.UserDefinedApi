@@ -14,7 +14,7 @@
 		<PackageVersion Include="Skyline.DataMiner.Dev.Utils.SDM.Abstractions" Version="1.0.1" />
 
 		<PackageVersion Include="MSTest" Version="4.1.0" />
-		<PackageVersion Include="FluentAssertions" Version="7.2.0" />
+		<PackageVersion Include="FluentAssertions" Version="7.2.1" />
 		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.9" />
 		<PackageVersion Include="Microsoft.Build" Version="18.3.3" />
 		<PackageVersion Include="Microsoft.Build.Framework" Version="18.3.3" />
