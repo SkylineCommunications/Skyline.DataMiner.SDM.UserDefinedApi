@@ -81,17 +81,17 @@ using Skyline.DataMiner.SDM.UserDefinedApi;
 
 public class Script
 {
-	private static IUserDefinedApi _api;
+    private static IUserDefinedApi _api;
 
     [AutomationEntryPoint(AutomationEntryPointType.Types.OnApiTrigger)]
     public ApiTriggerOutput OnApiTrigger(IEngine engine, ApiTriggerInput requestData)
     {
-		if(_api is null)
-		{
-			_api = UserDefinedApi.CreateBuilder()
-				.AddControllers()
-				.Build();
-		}
+        if(_api is null)
+        {
+            _api = UserDefinedApi.CreateBuilder()
+                .AddControllers()
+                .Build();
+        }
 
         return _api.Run(engine, requestData);
     }
@@ -119,9 +119,9 @@ Controllers automatically support OData-style filtering:
 [HttpGet]
 public IActionResult GetTickets([FromQuery] string filter)
 {
-	var translator = new ODataSdmTranslator<Ticket>();
+    var translator = new ODataSdmTranslator<Ticket>();
     var filter = translator.TranslateFilter(filter);
-	var tickets = _ticketRepository.Read(filter);
+    var tickets = _ticketRepository.Read(filter);
 
     // OData filter examples:
     // $filter=Severity eq 'High'
