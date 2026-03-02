@@ -7,7 +7,7 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi.Build</AssemblyName>
 		<RootNamespace>Skyline.DataMiner.SDM.UserDefinedApi</RootNamespace>
-		<Version>1.0.1</Version>
+		<Version>1.0.1-rc3</Version>
 		<IsPackable>false</IsPackable>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
