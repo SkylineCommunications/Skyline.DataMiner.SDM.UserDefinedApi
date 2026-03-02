@@ -37,7 +37,6 @@ Create your automation script with the API trigger entry point:
 ```csharp
 namespace Skyline.DataMiner.SDM.Registration.UDAPI
 {
-    using System.Runtime.CompilerServices;
     using Skyline.DataMiner.Automation;
     using Skyline.DataMiner.Net.Apps.UserDefinableApis.Actions;
     using Skyline.DataMiner.SDM.UserDefinedApi;
@@ -96,6 +95,7 @@ public class SolutionsController : ControllerBase
         return StatusCode(201, solution);
     }
 
+    [HttpPut]
     public IActionResult Update([FromBody] SolutionRegistration solution)
     {
         var existing = _repository.GetById(id);
@@ -108,6 +108,7 @@ public class SolutionsController : ControllerBase
         return Ok(solution);
     }
 
+    [HttpDelete]
     public IActionResult Delete([FromQuery] string id)
     {
         var existing = _repository.GetById(id);
@@ -165,7 +166,7 @@ public class UsersController : ControllerBase
 
 - `[FromBody]` - Bind from request body (automatic JSON deserialization)
 - `[FromQuery]` - Bind from query string parameters
-- Route parameters - Automatically bound from query parameters
+- Route parameters - Currently not supported in User-Defined APIs
 
 ### Response Types
 
@@ -220,31 +221,37 @@ Query your data using OData conventions for filtering, sorting, and pagination.
 
 ### OpenAPI Documentation
 
-The framework automatically generates OpenAPI documentation from your controllers, making it easy to understand and test your API.
+The framework can automatically generate OpenAPI 3.0 documentation from your controllers during the build process.
 
-## Project Structure
+#### Enabling OpenAPI Generation
 
-This repository contains three main projects:
+To enable OpenAPI generation, add the following property to your `.csproj` file:
 
-- **SDM.UserDefinedApi** - Core interfaces and build-time components
-- **SDM.UserDefinedApi.Runtime** - Runtime framework including controllers, routing, and DI
-- **SDM.UserDefinedApi.Build** - MSBuild tasks for OpenAPI generation and packaging
-
-## Advanced Features
-
-### Custom Formatters
-
-Implement custom input/output formatters by implementing `IInputConverter` and `IOutputConverter`:
-
-```csharp
-public class MyCustomFormatter : IOutputConverter
-{
-    public string Convert<T>(T value)
-    {
-        // Custom serialization logic
-    }
-}
+```xml
+<PropertyGroup>
+  <GenerateOpenApi>True</GenerateOpenApi>
+</PropertyGroup>
 ```
+
+By default, this will generate an `openapi.yaml` file in your build output directory under the `openapi` folder.
+
+#### Specifying the Output Format
+
+You can specify the output format (YAML or JSON) using the `OpenApiFormat` property:
+
+```xml
+<PropertyGroup>
+  <GenerateOpenApi>True</GenerateOpenApi>
+  <OpenApiFormat>json</OpenApiFormat>  <!-- Options: yaml (default) or json -->
+</PropertyGroup>
+```
+
+The generated OpenAPI specification will include:
+- All API endpoints from your controllers
+- HTTP methods and route patterns
+- Request and response schemas
+- Parameter definitions
+- Model descriptions
 
 ### Access API Context
 
@@ -262,15 +269,17 @@ public class MyController : ControllerBase
 }
 ```
 
-## Requirements
+## About DataMiner
 
-- DataMiner 10.3.0 or higher
-- .NET Framework 4.6.2 or higher / .NET Standard 2.0
+DataMiner is a transformational platform that provides vendor-independent control and monitoring of devices and services. Out of the box and by design, it addresses key challenges such as security, complexity, multi-cloud, and much more. It has a pronounced open architecture and powerful capabilities enabling users to evolve easily and continuously.
 
-## License
+The foundation of DataMiner is its powerful and versatile data acquisition and control layer. With DataMiner, there are no restrictions to what data users can access. Data sources may reside on premises, in the cloud, or in a hybrid setup.
 
-See [LICENSE.txt](SDM.UserDefinedApi.Runtime/LICENSE.txt) for license information.
+A unique catalog of 7000+ connectors already exists. In addition, you can leverage DataMiner Development Packages to build your own connectors (also known as "protocols" or "drivers").
 
-## Support
+> **Note**
+> See also: [About DataMiner](https://aka.dataminer.services/about-dataminer).
 
-For issues, questions, or contributions, please refer to the Skyline Communications support channels.
+## About Skyline Communications
+
+At Skyline Communications, we deal in world-class solutions that are deployed by leading companies around the globe. Check out [our proven track record](https://aka.dataminer.services/about-skyline) and see how we make our customers' lives easier by empowering them to take their operations to the next level.

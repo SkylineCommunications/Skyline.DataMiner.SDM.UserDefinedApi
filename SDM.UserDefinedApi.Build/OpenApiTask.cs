@@ -73,7 +73,7 @@
 				Log.LogMessage(MessageImportance.High, "Starting OpenAPI generation...");
 
 				var doc = CreateDocument(ProjectName, ProjectVersion, SourceFiles.Select(f => f.ItemSpec), References.Select(f => f.ItemSpec), (message) => Log.LogMessage(MessageImportance.High, message));
-				var (fileName, content) = FormatDocument(doc, Format);
+				var (fileName, content) = FormatDocument(doc, Format.ToLowerInvariant());
 
 				var outputPath = Path.Combine(ProjectDirectory, OutputPath, fileName);
 				if (!Directory.Exists(Path.GetDirectoryName(outputPath)))
