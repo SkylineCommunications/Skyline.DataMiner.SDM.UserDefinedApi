@@ -27,33 +27,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Install\Content\Install.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="Install\Content\Install.csproj">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="Install\Content\Install.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<ApplicationDefinition Include="Install\Content\Install.cs">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</ApplicationDefinition>
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="buildTransitive\Skyline.DataMiner.SDM.UserDefinedApi.Build.props" Pack="true" PackagePath="buildTransitive" />
 		<None Include="buildTransitive\Skyline.DataMiner.SDM.UserDefinedApi.Build.targets" Pack="true" PackagePath="buildTransitive" />
-		<None Include="Install\Content\Install.cs">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Build.Utilities.Core" PrivateAssets="all" ExcludeAssets="Runtime" />
 		<PackageReference Include="Microsoft.OpenApi" PrivateAssets="all" />
-		<PackageReference Include="Skyline.DataMiner.CICD.DMApp.Automation" />
 		<PackageReference Include="Skyline.DataMiner.SDM.Parsers.Common" />
 	</ItemGroup>
 

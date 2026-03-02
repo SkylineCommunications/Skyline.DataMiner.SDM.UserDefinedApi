@@ -5,7 +5,6 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageVersion Include="Microsoft.OpenApi" Version="3.3.1" />
-		<PackageVersion Include="Skyline.DataMiner.CICD.DMApp.Automation" Version="5.1.1" />
 		<PackageVersion Include="Skyline.DataMiner.SDM.Parsers.Common" Version="1.0.1" />
 
 		<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />

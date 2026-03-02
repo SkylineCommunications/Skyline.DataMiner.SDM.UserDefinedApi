@@ -8,7 +8,7 @@
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<PackageId>Skyline.DataMiner.SDM.UserDefinedApi</PackageId>
 		<AssemblyName>Skyline.DataMiner.SDM.UserDefinedApi</AssemblyName>
-		<Version>1.0.1-rc2</Version>
+		<Version>1.0.1</Version>
 		<PackageTags>Skyline;DataMiner</PackageTags>
 		<PackageProjectUrl>https://skyline.be</PackageProjectUrl>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -49,10 +49,15 @@
 	<!-- Ensure Build project is built and include its files in package -->
 	<Target Name="IncludeBuildTaskFiles" BeforeTargets="GetTargetPath;GenerateNuspec">
 		<MSBuild Projects="../SDM.UserDefinedApi.Build/SDM.UserDefinedApi.Build.csproj" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
-		
+
 		<ItemGroup>
 			<!-- Build task DLL files -->
 			<None Include="../SDM.UserDefinedApi.Build/bin/$(Configuration)/netstandard2.0/*.dll"
+				  Pack="true"
+				  PackagePath="tasks/netstandard2.0/" />
+
+			<!-- Add the deps.json file for assembly loading -->
+			<None Include="../SDM.UserDefinedApi.Build/bin/$(Configuration)/netstandard2.0/*.deps.json"
 				  Pack="true"
 				  PackagePath="tasks/netstandard2.0/" />
 

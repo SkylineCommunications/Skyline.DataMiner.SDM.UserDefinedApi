@@ -8,12 +8,10 @@
 
 	<!--Register Tasks -->
 	<UsingTask TaskName="Skyline.DataMiner.SDM.UserDefinedApi.OpenApiTask" AssemblyFile="$(_UDAPI_TaskAssembly_)"/>
-	<UsingTask TaskName="Skyline.DataMiner.SDM.UserDefinedApi.PackageTask" AssemblyFile="$(_UDAPI_TaskAssembly_)"/>
 
 	<!-- Default values, this can be overridden-->
 	<PropertyGroup>
 		<OpenApiFormat Condition="'$(OpenApiFormat)' == ''">yaml</OpenApiFormat>
 		<GenerateOpenApi Condition="'$(GenerateOpenApi)' == ''">false</GenerateOpenApi>
-		<GenerateUDAPIPackage Condition="'$(GenerateUDAPIPackage)' == ''">false</GenerateUDAPIPackage>
 	</PropertyGroup>
 </Project>
