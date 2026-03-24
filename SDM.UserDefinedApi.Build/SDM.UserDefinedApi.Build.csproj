@@ -38,6 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+  	<PackageReference Include="Microsoft.Build.Framework" />
 		<InternalsVisibleTo Include="SDM.UserDefinedApi.Tests" />
 	</ItemGroup>
 
