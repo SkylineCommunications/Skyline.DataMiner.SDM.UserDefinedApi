@@ -32,6 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Build.Framework" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" PrivateAssets="all" ExcludeAssets="Runtime" />
 		<PackageReference Include="Microsoft.OpenApi" PrivateAssets="all" />
 		<PackageReference Include="Skyline.DataMiner.SDM.Parsers.Common" />
