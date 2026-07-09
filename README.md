@@ -1,7 +1,7 @@
 # Skyline.DataMiner.SDM.UserDefinedApi
 
-> **⚠️ Deprecated**
-> This repository and NuGet package are no longer maintained and have been archived. The functionality has been split into two separate packages:
+> [!WARNING]
+> **Deprecated:** This repository and NuGet package are no longer maintained and have been archived. The functionality has been split into two separate packages:
 >
 > - [Skyline.DataMiner.SDM.OData](https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.OData) — OData query support.
 > - [Skyline.DataMiner.Utils.UserDefinedApiToolkit](https://github.com/SkylineCommunications/Skyline.DataMiner.Utils.UserDefinedApiToolkit) — the controller-based User-Defined API framework (routing, DI, OpenAPI generation).
@@ -55,10 +55,11 @@ The controller/routing/DI framework and the OData query support that used to liv
 
 For full details and additional examples, see the READMEs of the two new repositories linked above.
 
----
 
+> [!NOTE]
 > The remainder of this README describes the original, now deprecated, `Skyline.DataMiner.SDM.UserDefinedApi` package and is kept for historical/archival reference only.
 
+---
 ## About
 
 This SDK simplifies the creation of User-Defined APIs in DataMiner by providing:
