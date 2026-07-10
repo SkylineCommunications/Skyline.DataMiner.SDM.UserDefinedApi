@@ -1,7 +1,65 @@
 # Skyline.DataMiner.SDM.UserDefinedApi
 
+> [!WARNING]
+> **Deprecated:** This repository and NuGet package are no longer maintained and have been archived. The functionality has been split into two separate packages:
+>
+> - [Skyline.DataMiner.SDM.OData](https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.OData) — OData query support.
+> - [Skyline.DataMiner.Utils.UserDefinedApiToolkit](https://github.com/SkylineCommunications/Skyline.DataMiner.Utils.UserDefinedApiToolkit) — the controller-based User-Defined API framework (routing, DI, OpenAPI generation).
+>
+> Please migrate to these packages for new development and future updates.
+
 A framework for building User-Defined APIs in DataMiner, providing a controller-based approach similar to ASP.NET Core for creating RESTful APIs.
 
+## Migration Guide
+
+The controller/routing/DI framework and the OData query support that used to live together in this package have been split into two independently maintained packages:
+
+| Old (this package) | New package | Covers |
+| --- | --- | --- |
+| `Skyline.DataMiner.SDM.UserDefinedApi` (controllers, routing, DI, OpenAPI) | [`Skyline.DataMiner.Utils.UserDefinedApiToolkit`](https://github.com/SkylineCommunications/Skyline.DataMiner.Utils.UserDefinedApiToolkit) | Attribute routing, DI, typed results, OpenAPI generation |
+| `Skyline.DataMiner.SDM.UserDefinedApi` (OData support) | [`Skyline.DataMiner.SDM.OData`](https://github.com/SkylineCommunications/Skyline.DataMiner.SDM.OData) | `$filter`/`$orderby` parsing and translation to `SLDataGateway` queries |
+
+### Steps
+
+1. **Update package references**
+   ```bash
+   dotnet remove package Skyline.DataMiner.SDM.UserDefinedApi
+   dotnet add package Skyline.DataMiner.Utils.UserDefinedApiToolkit
+   # Only if you were using OData query support:
+   dotnet add package Skyline.DataMiner.SDM.OData
+   ```
+
+2. **Update namespaces**
+   Replace `using Skyline.DataMiner.SDM.UserDefinedApi;` (and `...DI;`) with:
+   ```csharp
+   using Skyline.DataMiner.Utils.UserDefinedApiToolkit;
+   ```
+   The entry point (`UserDefinedApi.CreateBuilder().AddControllers().Build()` called from `OnApiTrigger`), controller base class, attributes (`[ApiController]`, `[Route]`, `[HttpGet]`, etc.) and DI (`ConfigureServices`) keep the same shape, just under the new namespace/package.
+
+3. **Update action return types**
+   Controllers in the new toolkit return typed `IApiResult` / `ApiResult<TSuccess>` / `ApiResult<TSuccess, TError>` instead of `IActionResult`:
+   ```csharp
+   [HttpGet]
+   public ApiResult<UserDto, string> GetById([FromQuery] int id)
+   {
+       var user = _repository.GetById(id);
+       return user is null ? NotFound("User not found.") : Ok(user);
+   }
+   ```
+
+4. **Move OData filtering/sorting logic**
+   If you used the built-in OData query support, switch to `ODataSdmTranslator<T>` from `Skyline.DataMiner.SDM.OData` to translate `$filter`/`$orderby` strings into `IQuery<T>` instances for `SLDataGateway`.
+
+5. **Services registration**
+   Repositories registered via `ConfigureServices` continue to work the same way; check the [`Skyline.DataMiner.Utils.UserDefinedApiToolkit` README](https://github.com/SkylineCommunications/Skyline.DataMiner.Utils.UserDefinedApiToolkit) for the current recommended registration patterns.
+
+For full details and additional examples, see the READMEs of the two new repositories linked above.
+
+
+> [!NOTE]
+> The remainder of this README describes the original, now deprecated, `Skyline.DataMiner.SDM.UserDefinedApi` package and is kept for historical/archival reference only.
+
+---
 ## About
 
 This SDK simplifies the creation of User-Defined APIs in DataMiner by providing:
