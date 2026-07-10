@@ -2,6 +2,8 @@
 {
 	using System;
 	using System.IO;
+	using System.Linq;
+	using System.Runtime.InteropServices;
 
 	using Microsoft.Build.Locator;
 	using Microsoft.OpenApi;
@@ -16,8 +18,73 @@
 		{
 			if (!MSBuildLocator.IsRegistered)
 			{
-				MSBuildLocator.RegisterDefaults();
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+				{
+					// On Windows, use RegisterDefaults to find Visual Studio instances
+					MSBuildLocator.RegisterDefaults();
+				}
+				else
+				{
+					// On Linux/Mac, manually locate and register MSBuild from the .NET SDK
+					RegisterMSBuildOnLinux();
+				}
 			}
+		}
+
+		private static void RegisterMSBuildOnLinux()
+		{
+			// Find dotnet executable
+			var dotnetPath = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH");
+			if (string.IsNullOrEmpty(dotnetPath))
+			{
+				// Try to find dotnet in PATH
+				var pathDirs = (Environment.GetEnvironmentVariable("PATH") ?? string.Empty).Split(':');
+				foreach (var dir in pathDirs)
+				{
+					var candidatePath = Path.Combine(dir, "dotnet");
+					if (File.Exists(candidatePath))
+					{
+						dotnetPath = candidatePath;
+						break;
+					}
+				}
+			}
+
+			if (string.IsNullOrEmpty(dotnetPath))
+			{
+				throw new InvalidOperationException("Could not locate dotnet SDK. Ensure .NET SDK is installed.");
+			}
+
+			// Get the SDK directory
+			var dotnetDir = Path.GetDirectoryName(dotnetPath);
+			var sdkDir = Path.Combine(dotnetDir, "sdk");
+
+			if (!Directory.Exists(sdkDir))
+			{
+				throw new InvalidOperationException($"SDK directory not found at {sdkDir}");
+			}
+
+			// Find the latest SDK version
+			var sdkVersions = Directory.GetDirectories(sdkDir)
+				.Select(d => new { Path = d, Version = new DirectoryInfo(d).Name })
+				.OrderByDescending(x => x.Version)
+				.ToList();
+
+			if (sdkVersions.Count == 0)
+			{
+				throw new InvalidOperationException($"No SDK versions found in {sdkDir}");
+			}
+
+			var latestSdk = sdkVersions[0].Path;
+			var msbuildDll = Path.Combine(latestSdk, "MSBuild.dll");
+
+			if (!File.Exists(msbuildDll))
+			{
+				throw new InvalidOperationException($"MSBuild.dll not found at {msbuildDll}");
+			}
+
+			// Register the MSBuild instance
+			MSBuildLocator.RegisterMSBuildPath(latestSdk);
 		}
 
 		[TestMethod]
